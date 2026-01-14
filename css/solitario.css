@@ -14,14 +14,21 @@
 	bottom: 0px;
 	right: 3px;
 }
-
+.central {
+	text-align: center;
+	padding: 2rem;
+}
 
 /* Centrado del título y color */
 h1#titulo {
 	text-align: center;
 	color: #E65014;
+	margin-right: 1rem;
 }
-
+img#logo {
+	text-align: center;
+	width: 10rem;
+}
 /* Centrado de los marcadores de tiempo y movimientos */
 h2#marcadores{ 
 	text-align: center; 
