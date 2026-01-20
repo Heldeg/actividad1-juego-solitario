@@ -1,5 +1,6 @@
 /***** INICIO DECLARACIÓN DE VARIABLES GLOBALES *****/
 
+const imgPath = '../imagenes/baraja'
 // Array de palos
 let suits = ["viu", "cua", "hex", "cir"];
 // Array de número de cartas
@@ -76,6 +77,22 @@ function startGame() {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
 } // comenzarJuego
+function createCard(number, suit) {
+	card = document.createElement("img");
+	card.src = `${imgPath}/${number}-${suit}.png`;
+	card.setAttribute("data-number", number);
+	card.setAttribute("data-suit", suit);
+	return card;
+}
+
+function createDeck() {
+	for (let suit of suits) {
+		for (let number of numberRange) {
+			initDeck.push(createCard(number, suit));
+		}
+	}
+}
+
 
 
 /**
@@ -127,9 +144,16 @@ function setTimer(){
 	reordenado aleatoriamente. Al ser un array un objeto, se pasa
 	por referencia, de modo que si se altera el orden de dicho array
 	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
+	https://www.w3schools.com/js/tryit.asp?filename=tryjs_array_sort_random2
 */
-function shuffle(deck) {
+function shuffleDeck(deck) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+	for (let i =  deck.length-1; i > 0; i--) {
+		let j = Math.floor(Math.random() * (i+1));
+		let k = deck[i];
+		deck[i] = deck[j];
+		deck[j] = k;
+	}
 } // barajar
 
 
