@@ -51,7 +51,7 @@ div.mat{
 
 .card {
 	position:absolute;
-	width: 80px;
+	width: 70px;
 	height: auto;
 	pointer-events: none;
 }
