@@ -1,48 +1,52 @@
 /***** INICIO DECLARACIÓN DE VARIABLES GLOBALES *****/
 
+const imgPath = '../imagenes/baraja'
 // Array de palos
-let palos = ["viu", "cua", "hex", "cir"];
+let suits = ["viu", "cua", "hex", "cir"];
 // Array de número de cartas
-//let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+//let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
-let numeros = [9, 10, 11, 12];
+
+//TODO: allow the user to decide the range in the UI
+let numberRange = [9, 10, 11, 12];
+
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
-let paso = 5;
+let step = 5;
 
 // Tapetes				
-let tapeteInicial   = document.getElementById("inicial");
-let tapeteSobrantes = document.getElementById("sobrantes");
-let tapeteReceptor1 = document.getElementById("receptor1");
-let tapeteReceptor2 = document.getElementById("receptor2");
-let tapeteReceptor3 = document.getElementById("receptor3");
-let tapeteReceptor4 = document.getElementById("receptor4");
+let initMat = document.getElementById("initial");
+let leftoverCardMat = document.getElementById("leftover");
+let receptorMat1 = document.getElementById("receptor1");
+let receptorMat2 = document.getElementById("receptor2");
+let receptorMat3 = document.getElementById("receptor3");
+let receptorMat4 = document.getElementById("receptor4");
 
 // Mazos
-let mazoInicial   = [];
-let mazoSobrantes = [];
-let mazoReceptor1 = [];
-let mazoReceptor2 = [];
-let mazoReceptor3 = [];
-let mazoReceptor4 = [];
+let initDeck = [];
+let leftoverDeck = [];
+let receptorDeck1 = [];
+let receptorDeck2 = [];
+let receptorDeck3 = [];
+let receptorDeck4 = [];
 
 // Contadores de cartas
-let contInicial     = document.getElementById("contador_inicial");
-let contSobrantes   = document.getElementById("contador_sobrantes");
-let contReceptor1   = document.getElementById("contador_receptor1");
-let contReceptor2   = document.getElementById("contador_receptor2");
-let contReceptor3   = document.getElementById("contador_receptor3");
-let contReceptor4   = document.getElementById("contador_receptor4");
-let contMovimientos = document.getElementById("contador_movimientos");
+let initCount = document.getElementById("init_counter");
+let leftoverCount = document.getElementById("leftover_counter");
+let receptorCount1 = document.getElementById("receptor_counter1");
+let receptorCount2 = document.getElementById("receptor_counter2");
+let receptorCount3 = document.getElementById("receptor_counter3");
+let receptorCount4 = document.getElementById("receptor_counter4");
+let moveCount = document.getElementById("movement_counter");
 
 // Tiempo
-let contTiempo  = document.getElementById("contador_tiempo"); // span cuenta tiempo
-let segundos 	 = 0;    // cuenta de segundos
-let temporizador = null; // manejador del temporizador
+let timerCount = document.getElementById("timer_counter"); // span cuenta tiempo
+let seconds = 0;    // cuenta de segundos
+let timer = null; // manejador del temporizador
 
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
- 
+
 // Rutina asociada a boton reset
 /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
@@ -51,7 +55,7 @@ let temporizador = null; // manejador del temporizador
 /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
 // Desarrollo del comienzo de juego
-function comenzarJuego() {
+function startGame() {
 	/* Crear baraja, es decir crear el mazoInicial. Este será un array cuyos 
 	elementos serán elementos HTML <img>, siendo cada uno de ellos una carta.
 	Sugerencia: en dos bucles for, bárranse los "palos" y los "numeros", formando
@@ -60,19 +64,24 @@ function comenzarJuego() {
 	el elemento img, inclúyase como elemento del array mazoInicial. 
 	*/
 
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
-    
-	
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+
+
 	// Barajar y dejar mazoInicial en tapete inicial
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	setupInitMat(initDeck);
 
 	// Puesta a cero de contadores de mazos
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-	
+	setupCounters();
 	// Arrancar el conteo de tiempo
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	setTimer();
+	makeZonesDraggable();
 
 } // comenzarJuego
+
+
 
 
 /**
@@ -99,23 +108,23 @@ function comenzarJuego() {
 	a clearInterval en su caso.   
 */
 
-function arrancarTiempo(){
+function setTimer() {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-	if (temporizador) clearInterval(temporizador);
-    let hms = function (){
-			let seg = Math.trunc( segundos % 60 );
-			let min = Math.trunc( (segundos % 3600) / 60 );
-			let hor = Math.trunc( (segundos % 86400) / 3600 );
-			let tiempo = ( (hor<10)? "0"+hor : ""+hor ) 
-						+ ":" + ( (min<10)? "0"+min : ""+min )  
-						+ ":" + ( (seg<10)? "0"+seg : ""+seg );
-			setContador(contTiempo, tiempo);
-            segundos++;
-		}
-	segundos = 0;
-    hms(); // Primera visualización 00:00:00
-	temporizador = setInterval(hms, 1000);
-    	
+	if (timer) clearInterval(timer);
+	let hms = function () {
+		let seg = Math.trunc(seconds % 60);
+		let min = Math.trunc((seconds % 3600) / 60);
+		let hor = Math.trunc((seconds % 86400) / 3600);
+		let tiempo = ((hor < 10) ? "0" + hor : "" + hor)
+			+ ":" + ((min < 10) ? "0" + min : "" + min)
+			+ ":" + ((seg < 10) ? "0" + seg : "" + seg);
+		setCounter(timerCount, tiempo);
+		seconds++;
+	}
+	seconds = 0;
+	hms(); // Primera visualización 00:00:00
+	timer = setInterval(hms, 1000);
+
 } // arrancarTiempo
 
 
@@ -124,44 +133,107 @@ function arrancarTiempo(){
 	reordenado aleatoriamente. Al ser un array un objeto, se pasa
 	por referencia, de modo que si se altera el orden de dicho array
 	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
+	https://www.w3schools.com/js/tryit.asp?filename=tryjs_array_sort_random2
 */
-function barajar(mazo) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+function shuffleDeck(deck) {
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	for (let i = deck.length - 1; i > 0; i--) {
+		let j = Math.floor(Math.random() * (i + 1));
+		let k = deck[i];
+		deck[i] = deck[j];
+		deck[j] = k;
+	}
 } // barajar
 
 
 
 /**
- 	En el elemento HTML que representa el tapete inicial (variable tapeteInicial)
+	  En el elemento HTML que representa el tapete inicial (variable tapeteInicial)
 	se deben añadir como hijos todos los elementos <img> del array mazo.
 	Antes de añadirlos, se deberían fijar propiedades como la anchura, la posición,
 	coordenadas top y left, algun atributo de tipo data-...
 	Al final se debe ajustar el contador de cartas a la cantidad oportuna
 */
-function cargarTapeteInicial(mazo) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+function setupInitMat(deck) {
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	createDeck();
+	shuffleDeck(deck);
+	putDeckInInitMat();
+	makeLastCardDraggable(deck);
 } // cargarTapeteInicial
 
+function putDeckInInitMat() {
+	let stepCount = 0
+	initDeck.forEach(element => {
+		element.style.top = `${stepCount * step}px`;
+		element.style.left = `${stepCount * step}px`;
+		initMat.appendChild(element);
+		stepCount++;
+	});
+}
+
+function createCard(number, suit) {
+	card = document.createElement("img");
+	card.src = `${imgPath}/${number}-${suit}.png`;
+	card.setAttribute("data-number", number);
+	card.setAttribute("data-suit", suit);
+	card.classList.add("card");
+	return card;
+}
+
+function createDeck() {
+	for (let suit of suits) {
+		for (let number of numberRange) {
+			initDeck.push(createCard(number, suit));
+		}
+	}
+}
+// Use to change counter value
+function updateCounter(counter, deck) {
+	setCounter(counter, deck.length);
+}
+
+
+function setupCounters() {
+	updateCounter(initCount, initDeck);
+	updateCounter(leftoverCount, leftoverDeck);
+	updateCounter(receptorCount1, receptorDeck1);
+	updateCounter(receptorCount2, receptorDeck2);
+	updateCounter(receptorCount3, receptorDeck3);
+	updateCounter(receptorCount4, receptorDeck4);
+	setCounter(moveCount, 0);
+}
+
 
 /**
- 	Esta función debe incrementar el número correspondiente al contenido textual
-   	del elemento que actúa de contador
+	  Esta función debe incrementar el número correspondiente al contenido textual
+		  del elemento que actúa de contador
 */
-function incContador(contador){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+function incMoveCounter() {
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	moveCount.innerHTML = parseInt(moveCount.innerHTML) + 1;
 } // incContador
-
-/**
-	Idem que anterior, pero decrementando 
-*/
-function decContador(contador){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! ***/	
-} // decContador
 
 /**
 	Similar a las anteriores, pero ajustando la cuenta al
 	valor especificado
 */
-function setContador(contador, valor) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-} // setContador
+function setCounter(counter, value) {
+	counter.innerHTML = value;
+} // setCounter
+
+function makeLastCardDraggable(deck) {
+	let lastCard = deck[deck.length - 1];
+	lastCard.classList.add("draggable");
+	lastCard.setAttribute("draggable", true);
+}
+function makeZonesDraggable() {
+	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
+	dropZones.forEach(zone => {
+		zone.addEventListener("dragover", (e) => {
+			e.preventDefault();
+		});
+	});
+}
+
+startGame();
