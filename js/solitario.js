@@ -12,7 +12,7 @@ let numberRange = [9, 10, 11, 12];
 
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
-let paso = 5;
+let step = 5;
 
 // Tapetes				
 let initMat   = document.getElementById("initial");
@@ -77,21 +77,7 @@ function startGame() {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
 } // comenzarJuego
-function createCard(number, suit) {
-	card = document.createElement("img");
-	card.src = `${imgPath}/${number}-${suit}.png`;
-	card.setAttribute("data-number", number);
-	card.setAttribute("data-suit", suit);
-	return card;
-}
 
-function createDeck() {
-	for (let suit of suits) {
-		for (let number of numberRange) {
-			initDeck.push(createCard(number, suit));
-		}
-	}
-}
 
 
 
@@ -167,7 +153,37 @@ function shuffleDeck(deck) {
 */
 function setupInitMat(deck) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+	createDeck();
+	shuffleDeck(initDeck);
+	putDeckInInitMat();
 } // cargarTapeteInicial
+
+function putDeckInInitMat() {
+	let stepCount = 0
+	initDeck.forEach(element => {
+		element.style.top = `${stepCount * step}px`;
+		element.style.left =  `${stepCount * step}px`;
+		initMat.appendChild(element);
+		stepCount++;
+	});
+}
+
+function createCard(number, suit) {
+	card = document.createElement("img");
+	card.src = `${imgPath}/${number}-${suit}.png`;
+	card.setAttribute("data-number", number);
+	card.setAttribute("data-suit", suit);
+	card.classList.add("card"); 
+	return card;
+}
+
+function createDeck() {
+	for (let suit of suits) {
+		for (let number of numberRange) {
+			initDeck.push(createCard(number, suit));
+		}
+	}
+}
 
 
 /**
@@ -192,3 +208,5 @@ function decCounter(counter){
 function setCounter(counter, value) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 } // setContador
+
+setupInitMat(initDeck);

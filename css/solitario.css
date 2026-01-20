@@ -49,6 +49,16 @@ div.mat{
 	margin: 10px;
 }
 
+.card {
+	position:absolute;
+	width: 80px;
+	height: auto;
+}
+
+div.mat#leftover > img.card{
+	left: 0px;
+}
+
 /* Dimensiones y color de fondo para el tapete inicial */
 div.mat#initial{
 	width: 340px;
