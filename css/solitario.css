@@ -9,7 +9,7 @@
 /* Todos los contadores estarán ubicados en la parte inferior 
    derecha (position absolute) de los respectivos tapetes (position relative).
 */
-.contador {
+.counter {
 	position: absolute;
 	bottom: 0px;
 	right: 3px;
@@ -20,7 +20,7 @@
 }
 
 /* Centrado del título y color */
-h1#titulo {
+h1#title {
 	text-align: center;
 	color: #E65014;
 	margin-right: 1rem;
@@ -30,12 +30,12 @@ img#logo {
 	width: 10rem;
 }
 /* Centrado de los marcadores de tiempo y movimientos */
-h2#marcadores{ 
+h2#tags{ 
 	text-align: center; 
 }
 
 /* Mesa que contiene a los tapetes centrados */
-div#mesa{
+div#table{
 	text-align: center;
 	margin:20px;
 }
@@ -43,31 +43,31 @@ div#mesa{
 /* Todos los tapetes con position relative para que
    los respectivos mazos (arrays de <img>) puedan
    posicionarse de manera absoluta respecto a ellos */
-div.tapete{
+div.mat{
 	display: inline-block;
 	position: relative;
 	margin: 10px;
 }
 
 /* Dimensiones y color de fondo para el tapete inicial */
-div.tapete#inicial{
+div.mat#inicial{
 	width: 340px;
 	height: 340px;			
 	background-color: lightgrey;
 }
 
 /* Dimensiones para todos los tapetes salvo el inicial */
-div.tapete:not(#inicial){				
+div.mat:not(#inicial){				
 	height: 125px;
 	width: 100px;
 }
 
 /* Color de fondo para el tapete de las cartas sobrantes */
-div.tapete#sobrantes{
+div.mat#leftover{
 	background-color: lightblue;
 }
 
 /* Color de fondo de los tapetes receptores */
-div.tapete.receptor{
+div.mat.receptor{
 	background-color: lightgreen;
 }

@@ -14,8 +14,8 @@ let numberRange = [9, 10, 11, 12];
 let paso = 5;
 
 // Tapetes				
-let initMat   = document.getElementById("inicial");
-let leftoverCardMat = document.getElementById("sobrantes");
+let initMat   = document.getElementById("initial");
+let leftoverCardMat = document.getElementById("leftover");
 let receptorMat1 = document.getElementById("receptor1");
 let receptorMat2 = document.getElementById("receptor2");
 let receptorMat3 = document.getElementById("receptor3");
@@ -30,16 +30,16 @@ let receptorDeck3 = [];
 let receptorDeck4 = [];
 
 // Contadores de cartas
-let initCount     = document.getElementById("contador_inicial");
-let leftoverCount   = document.getElementById("contador_sobrantes");
-let receptorCount1   = document.getElementById("contador_receptor1");
-let receptorCount2   = document.getElementById("contador_receptor2");
-let receptorCount3   = document.getElementById("contador_receptor3");
-let receptorCount4   = document.getElementById("contador_receptor4");
-let moveCount = document.getElementById("contador_movimientos");
+let initCount     = document.getElementById("init_counter");
+let leftoverCount   = document.getElementById("leftover_counter");
+let receptorCount1   = document.getElementById("receptor_counter1");
+let receptorCount2   = document.getElementById("receptor_counter2");
+let receptorCount3   = document.getElementById("receptor_counter3");
+let receptorCount4   = document.getElementById("receptor_counter4");
+let moveCount = document.getElementById("movement_counter");
 
 // Tiempo
-let timerCount  = document.getElementById("contador_tiempo"); // span cuenta tiempo
+let timerCount  = document.getElementById("timer_counter"); // span cuenta tiempo
 let seconds 	 = 0;    // cuenta de segundos
 let timer = null; // manejador del temporizador
 
@@ -128,7 +128,7 @@ function setTimer(){
 	por referencia, de modo que si se altera el orden de dicho array
 	dentro de la rutina, esto aparecerá reflejado fuera de la misma.
 */
-function shuffle(mazo) {
+function shuffle(deck) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 } // barajar
 
@@ -141,7 +141,7 @@ function shuffle(mazo) {
 	coordenadas top y left, algun atributo de tipo data-...
 	Al final se debe ajustar el contador de cartas a la cantidad oportuna
 */
-function setupInitMat(mazo) {
+function setupInitMat(deck) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 } // cargarTapeteInicial
 
@@ -150,14 +150,14 @@ function setupInitMat(mazo) {
  	Esta función debe incrementar el número correspondiente al contenido textual
    	del elemento que actúa de contador
 */
-function startCounter(contador){
+function startCounter(counter){
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 } // incContador
 
 /**
 	Idem que anterior, pero decrementando 
 */
-function decCounter(contador){
+function decCounter(counter){
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! ***/	
 } // decCounter
 
@@ -165,6 +165,6 @@ function decCounter(contador){
 	Similar a las anteriores, pero ajustando la cuenta al
 	valor especificado
 */
-function setCounter(contador, valor) {
+function setCounter(counter, value) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 } // setContador

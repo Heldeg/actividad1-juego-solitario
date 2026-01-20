@@ -24,36 +24,36 @@
 			Rellenar h1 e insertar el logo donde proceda
         	-->
 		<header class="container">
-					<h1 id="titulo">Juego del solitario<img id="logo" src="imagenes/logoVIU.png" alt="Logo del Solitario VIU"></h1>
+					<h1 id="title">Juego del solitario<img id="logo" src="imagenes/logoVIU.png" alt="Logo del Solitario VIU"></h1>
 		</header>
 
 
 		<!-- Siguiente línea donde se indicará el tiempo transcurrido y la cantidad
 				de movimientos que se han hecho hasta el momento. Estos números se 
 				indicarán en los span internos -->
-		<h2 id="marcadores">
-			<span>Tiempo: <span id="contador_tiempo"></span></span>
+		<h2 id="tags">
+			<span>Tiempo: <span id="timer_counter"></span></span>
 			<span style="display:inline-block; width:200px"></span>
-			<span>Movimientos: <span id="contador_movimientos" class=""></span></span>
+			<span>Movimientos: <span id="movement_counter" class=""></span></span>
 		</h2>
 
 		<!-- La "mesa" contendrá los 6 tapetes. En la parte superior dos de ellos 
 				y en la parte inferior los cuatro restantes. Los contadores de los
 				mazos de cartas de cada tapete están indicados oportunamente dentro
 				de elementos span -->
-		<div id="mesa">
-			<div class="tapetes_superiores">
-				<div id="inicial" class="tapete"><span id="contador_inicial" class="contador"></span></div><!--
+		<div id="table">
+			<div class="superior_mat">
+				<div id="initial" class="mat"><span id="init_counter" class="counter"></span></div><!--
 					-->
-				<div id="sobrantes" class="tapete"><span id="contador_sobrantes" class="contador"></span></div>
+				<div id="leftover" class="mat"><span id="leftover_counter" class="counter"></span></div>
 			</div>
-			<div id="receptor1" class="tapete receptor"><span id="contador_receptor1" class="contador"></span></div><!--
+			<div id="receptor1" class="mat receptor"><span id="receptor_counter1" class="counter"></span></div><!--
 				-->
-			<div id="receptor2" class="tapete receptor"><span id="contador_receptor2" class="contador"></span></div><!--
+			<div id="receptor2" class="mat receptor"><span id="receptor_counter2" class="counter"></span></div><!--
 				-->
-			<div id="receptor3" class="tapete receptor"><span id="contador_receptor3" class="contador"></span></div><!--
+			<div id="receptor3" class="mat receptor"><span id="receptor_counter3" class="counter"></span></div><!--
 				-->
-			<div id="receptor4" class="tapete receptor"><span id="contador_receptor4" class="contador"></span></div>
+			<div id="receptor4" class="mat receptor"><span id="receptor_counter4" class="counter"></span></div>
 		</div>
 
 		<!-- Botón de reset que reinicia todo: partida, contadores de tiempo, de movimientos, ... -->
