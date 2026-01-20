@@ -50,14 +50,14 @@ div.mat{
 }
 
 /* Dimensiones y color de fondo para el tapete inicial */
-div.mat#inicial{
+div.mat#initial{
 	width: 340px;
 	height: 340px;			
 	background-color: lightgrey;
 }
 
 /* Dimensiones para todos los tapetes salvo el inicial */
-div.mat:not(#inicial){				
+div.mat:not(#initial){				
 	height: 125px;
 	width: 100px;
 }
