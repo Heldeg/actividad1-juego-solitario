@@ -15,7 +15,7 @@ let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let step = 5;
 
 // Tapetes				
-let initMat   = document.getElementById("initial");
+let initMat = document.getElementById("initial");
 let leftoverCardMat = document.getElementById("leftover");
 let receptorMat1 = document.getElementById("receptor1");
 let receptorMat2 = document.getElementById("receptor2");
@@ -23,7 +23,7 @@ let receptorMat3 = document.getElementById("receptor3");
 let receptorMat4 = document.getElementById("receptor4");
 
 // Mazos
-let initDeck   = [];
+let initDeck = [];
 let leftoverDeck = [];
 let receptorDeck1 = [];
 let receptorDeck2 = [];
@@ -31,22 +31,22 @@ let receptorDeck3 = [];
 let receptorDeck4 = [];
 
 // Contadores de cartas
-let initCount     = document.getElementById("init_counter");
-let leftoverCount   = document.getElementById("leftover_counter");
-let receptorCount1   = document.getElementById("receptor_counter1");
-let receptorCount2   = document.getElementById("receptor_counter2");
-let receptorCount3   = document.getElementById("receptor_counter3");
-let receptorCount4   = document.getElementById("receptor_counter4");
+let initCount = document.getElementById("init_counter");
+let leftoverCount = document.getElementById("leftover_counter");
+let receptorCount1 = document.getElementById("receptor_counter1");
+let receptorCount2 = document.getElementById("receptor_counter2");
+let receptorCount3 = document.getElementById("receptor_counter3");
+let receptorCount4 = document.getElementById("receptor_counter4");
 let moveCount = document.getElementById("movement_counter");
 
 // Tiempo
-let timerCount  = document.getElementById("timer_counter"); // span cuenta tiempo
-let seconds 	 = 0;    // cuenta de segundos
+let timerCount = document.getElementById("timer_counter"); // span cuenta tiempo
+let seconds = 0;    // cuenta de segundos
 let timer = null; // manejador del temporizador
 
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
- 
+
 // Rutina asociada a boton reset
 /*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 
@@ -64,9 +64,9 @@ function startGame() {
 	el elemento img, inclúyase como elemento del array mazoInicial. 
 	*/
 
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
-    
-	
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+
+
 	// Barajar y dejar mazoInicial en tapete inicial
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	setupInitMat(initDeck);
@@ -76,7 +76,7 @@ function startGame() {
 	setupCounters();
 	// Arrancar el conteo de tiempo
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-	setTimer();	
+	setTimer();
 	makeZonesDraggable();
 
 } // comenzarJuego
@@ -108,23 +108,23 @@ function startGame() {
 	a clearInterval en su caso.   
 */
 
-function setTimer(){
+function setTimer() {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	if (timer) clearInterval(timer);
-    let hms = function (){
-			let seg = Math.trunc( seconds % 60 );
-			let min = Math.trunc( (seconds % 3600) / 60 );
-			let hor = Math.trunc( (seconds % 86400) / 3600 );
-			let tiempo = ( (hor<10)? "0"+hor : ""+hor ) 
-						+ ":" + ( (min<10)? "0"+min : ""+min )  
-						+ ":" + ( (seg<10)? "0"+seg : ""+seg );
-			setCounter(timerCount, tiempo);
-            seconds++;
-		}
+	let hms = function () {
+		let seg = Math.trunc(seconds % 60);
+		let min = Math.trunc((seconds % 3600) / 60);
+		let hor = Math.trunc((seconds % 86400) / 3600);
+		let tiempo = ((hor < 10) ? "0" + hor : "" + hor)
+			+ ":" + ((min < 10) ? "0" + min : "" + min)
+			+ ":" + ((seg < 10) ? "0" + seg : "" + seg);
+		setCounter(timerCount, tiempo);
+		seconds++;
+	}
 	seconds = 0;
-    hms(); // Primera visualización 00:00:00
+	hms(); // Primera visualización 00:00:00
 	timer = setInterval(hms, 1000);
-    	
+
 } // arrancarTiempo
 
 
@@ -136,9 +136,9 @@ function setTimer(){
 	https://www.w3schools.com/js/tryit.asp?filename=tryjs_array_sort_random2
 */
 function shuffleDeck(deck) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
-	for (let i =  deck.length-1; i > 0; i--) {
-		let j = Math.floor(Math.random() * (i+1));
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	for (let i = deck.length - 1; i > 0; i--) {
+		let j = Math.floor(Math.random() * (i + 1));
 		let k = deck[i];
 		deck[i] = deck[j];
 		deck[j] = k;
@@ -148,14 +148,14 @@ function shuffleDeck(deck) {
 
 
 /**
- 	En el elemento HTML que representa el tapete inicial (variable tapeteInicial)
+	  En el elemento HTML que representa el tapete inicial (variable tapeteInicial)
 	se deben añadir como hijos todos los elementos <img> del array mazo.
 	Antes de añadirlos, se deberían fijar propiedades como la anchura, la posición,
 	coordenadas top y left, algun atributo de tipo data-...
 	Al final se debe ajustar el contador de cartas a la cantidad oportuna
 */
 function setupInitMat(deck) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	createDeck();
 	shuffleDeck(deck);
 	putDeckInInitMat();
@@ -166,7 +166,7 @@ function putDeckInInitMat() {
 	let stepCount = 0
 	initDeck.forEach(element => {
 		element.style.top = `${stepCount * step}px`;
-		element.style.left =  `${stepCount * step}px`;
+		element.style.left = `${stepCount * step}px`;
 		initMat.appendChild(element);
 		stepCount++;
 	});
@@ -177,7 +177,7 @@ function createCard(number, suit) {
 	card.src = `${imgPath}/${number}-${suit}.png`;
 	card.setAttribute("data-number", number);
 	card.setAttribute("data-suit", suit);
-	card.classList.add("card"); 
+	card.classList.add("card");
 	return card;
 }
 
@@ -206,10 +206,10 @@ function setupCounters() {
 
 
 /**
- 	Esta función debe incrementar el número correspondiente al contenido textual
-   	del elemento que actúa de contador
+	  Esta función debe incrementar el número correspondiente al contenido textual
+		  del elemento que actúa de contador
 */
-function incMoveCounter(){
+function incMoveCounter() {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	moveCount.innerHTML = parseInt(moveCount.innerHTML) + 1;
 } // incContador
@@ -223,9 +223,9 @@ function setCounter(counter, value) {
 } // setCounter
 
 function makeLastCardDraggable(deck) {
-	let lastCard = deck[deck.length-1];
+	let lastCard = deck[deck.length - 1];
 	lastCard.classList.add("draggable");
-	lastCard.setAttribute( "draggable", true);
+	lastCard.setAttribute("draggable", true);
 }
 function makeZonesDraggable() {
 	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
@@ -235,5 +235,5 @@ function makeZonesDraggable() {
 		});
 	});
 }
-	
+
 startGame();
