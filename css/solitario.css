@@ -53,10 +53,12 @@ div.mat{
 	position:absolute;
 	width: 80px;
 	height: auto;
+	pointer-events: none;
 }
 
-div.mat#leftover > img.card{
-	left: 0px;
+img.draggable {
+	pointer-events: all;
+	cursor: pointer;
 }
 
 /* Dimensiones y color de fondo para el tapete inicial */

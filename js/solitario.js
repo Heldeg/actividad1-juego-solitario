@@ -69,12 +69,15 @@ function startGame() {
 	
 	// Barajar y dejar mazoInicial en tapete inicial
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	setupInitMat(initDeck);
 
 	// Puesta a cero de contadores de mazos
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-	
+	setupCounters();
 	// Arrancar el conteo de tiempo
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	setTimer();	
+	makeZonesDraggable();
 
 } // comenzarJuego
 
@@ -154,8 +157,9 @@ function shuffleDeck(deck) {
 function setupInitMat(deck) {
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
 	createDeck();
-	shuffleDeck(initDeck);
+	shuffleDeck(deck);
 	putDeckInInitMat();
+	makeLastCardDraggable(deck);
 } // cargarTapeteInicial
 
 function putDeckInInitMat() {
@@ -184,29 +188,52 @@ function createDeck() {
 		}
 	}
 }
+// Use to change counter value
+function updateCounter(counter, deck) {
+	setCounter(counter, deck.length);
+}
+
+
+function setupCounters() {
+	updateCounter(initCount, initDeck);
+	updateCounter(leftoverCount, leftoverDeck);
+	updateCounter(receptorCount1, receptorDeck1);
+	updateCounter(receptorCount2, receptorDeck2);
+	updateCounter(receptorCount3, receptorDeck3);
+	updateCounter(receptorCount4, receptorDeck4);
+	setCounter(moveCount, 0);
+}
 
 
 /**
  	Esta función debe incrementar el número correspondiente al contenido textual
    	del elemento que actúa de contador
 */
-function startCounter(counter){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/	
+function incMoveCounter(){
+	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
+	moveCount.innerHTML = parseInt(moveCount.innerHTML) + 1;
 } // incContador
-
-/**
-	Idem que anterior, pero decrementando 
-*/
-function decCounter(counter){
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! ***/	
-} // decCounter
 
 /**
 	Similar a las anteriores, pero ajustando la cuenta al
 	valor especificado
 */
 function setCounter(counter, value) {
-	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
-} // setContador
+	counter.innerHTML = value;
+} // setCounter
 
-setupInitMat(initDeck);
+function makeLastCardDraggable(deck) {
+	let lastCard = deck[deck.length-1];
+	lastCard.classList.add("draggable");
+	lastCard.setAttribute( "draggable", true);
+}
+function makeZonesDraggable() {
+	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
+	dropZones.forEach(zone => {
+		zone.addEventListener("dragover", (e) => {
+			e.preventDefault();
+		});
+	});
+}
+	
+startGame();
