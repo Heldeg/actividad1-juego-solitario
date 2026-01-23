@@ -11,10 +11,15 @@
 */
 body {
 	font-family: 'Roboto';
+	background-image: url("../imagenes/background.jpg");
+	background-size: 100% 100%;
+	background-repeat: repeat;
 }
-h2{
+
+h2 {
 	color: white;
 }
+
 .counter {
 	position: absolute;
 	bottom: 0px;
@@ -27,11 +32,6 @@ h2{
 	padding: 2rem;
 }
 
-div.central {
-    background-image: url("../imagenes/background.jpg");
-    background-size: 100% 100%; 
-    background-repeat: repeat; 
-}
 
 /* Centrado del título y color */
 h1#title {
@@ -77,7 +77,7 @@ img.draggable {
 	cursor: pointer;
 }
 
-div.mat{
+div.mat {
 	border-radius: 5px;
 	border: 2px solid #EFB810;
 }
@@ -104,10 +104,11 @@ div.mat#leftover {
 div.mat.receptor {
 	background-color: rgba(144, 238, 144, 0.581);
 }
+
 /*Valores modificados de boostrap*/
 .btn-reset {
 	--bs-btn-color: white;
-  background-image: url("../imagenes/boton.jpg");
-  --bs-btn-border-color: #260400;
-  --bs-btn-hover-color: #EFB810;
+	background-image: url("../imagenes/boton.jpg");
+	--bs-btn-border-color: #260400;
+	--bs-btn-hover-color: #EFB810;
 }
