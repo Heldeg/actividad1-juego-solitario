@@ -294,11 +294,11 @@ function drop(ev) {
 	let suit = ev.dataTransfer.getData("text/plain/suit");
 	let matId = ev.dataTransfer.getData("text/plain/matId");
 
-	const targetId = ev.target.id;
+	const targetId = ev.currentTarget.id;
 
 	const card = document.querySelector(`[data-number='${number}'][data-suit='${suit}']`);
 	centerCard(card);
-	ev.target.appendChild(card);
+	ev.currentTarget.appendChild(card);
 
 	console.log(`Carta ${number} de ${suit} colocada en zona destino. Origen: ${matId}`);
 
