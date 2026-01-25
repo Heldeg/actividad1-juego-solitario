@@ -378,4 +378,8 @@ function endGame() {
 	alert("¡Felicidades! Has completado el juego en " + timerCount.innerHTML + " con " + moveCount.innerHTML + " movimientos.");
 } // finalizarJuego
 
+function resetGame() {
+	location.reload();
+}
+
 startGame();
