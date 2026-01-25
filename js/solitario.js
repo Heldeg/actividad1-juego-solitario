@@ -332,6 +332,8 @@ function isMoveAllowed(cardNumber, suit, targetId,) {
 	if (!lastCardTarget) {
 		if (parseInt(cardNumber) === 12) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 	let cardTargetSuit = lastCardTarget.dataset["suit"];
