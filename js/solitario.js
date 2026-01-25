@@ -304,7 +304,7 @@ function drop(ev) {
 	const targetId = ev.currentTarget.id;
 
 	if (targetId != "leftover") {
-		if(!isMoveAllowed(suit, targetId)) {
+		if (!isMoveAllowed(suit, targetId)) {
 			//TODO: Agregar estilo marco rojo
 			return;
 		}
@@ -318,15 +318,15 @@ function drop(ev) {
 	console.log(`Carta ${number} de ${suit} colocada en zona destino. Origen: ${matId}`);
 
 
-	updateArrayDecks(dictDecks[matId], dictDecks[targetId]);
+	updateArrayDecks(matId, targetId);
 	updateCounterChangedDecks(matId, targetId);
 	checkVicotory();
 }
 
-function isMoveAllowed(suit,targetId) {
+function isMoveAllowed(suit, targetId) {
 	let dickArray = dictDecks[targetId];
 	let lastCardTarget = dickArray[dickArray.length - 1];
-	if(!lastCardTarget){
+	if (!lastCardTarget) {
 		return true;
 	}
 	let cardTargetSuit = lastCardTarget.dataset["suit"];
@@ -338,11 +338,18 @@ function biconditional(p1, p2) {
 	return (p1 && p2) || (!p1 && !p2);
 }
 
-function updateArrayDecks(originDeck, targetDeck) {
+function updateArrayDecks(originDeckId, targetDeckId) {
+	let originDeck = dictDecks[originDeckId];
+	let targetDeck = dictDecks[targetDeckId];
 	const card = originDeck.pop();
 	targetDeck.push(card);
 	makeLastCardDraggable(originDeck);
-	removeSecondLastCardDragg(targetDeck);
+	if (targetDeckId == "leftover") {
+		removeSecondLastCardDragg(targetDeck);
+	} else {
+		makeNoDaggable(card);
+	}
+
 }
 
 function updateCounterChangedDecks(originDeckId, targetDeckId) {
@@ -353,9 +360,13 @@ function updateCounterChangedDecks(originDeckId, targetDeckId) {
 function removeSecondLastCardDragg(deck) {
 	if (deck.length > 1) {
 		let lastCard = deck[deck.length - 2];
-		lastCard.classList.remove("draggable");
-		lastCard.setAttribute("draggable", false);
+		makeNoDaggable(lastCard);
 	}
+}
+
+function makeNoDaggable (card) {
+	card.classList.remove("draggable");
+	card.setAttribute("draggable", false);
 }
 
 
@@ -366,7 +377,7 @@ function centerCard(card) {
 }
 
 function checkVicotory() {
-	if (initDeck.length == 0 && leftoverDeck.length == 0){
+	if (initDeck.length == 0 && leftoverDeck.length == 0) {
 		endGame();
 	}
 }
