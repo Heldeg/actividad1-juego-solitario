@@ -77,7 +77,6 @@ function startGame() {
 	// Arrancar el conteo de tiempo
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	setTimer();
-	makeZonesDraggable();
 
 } // comenzarJuego
 
@@ -160,6 +159,8 @@ function setupInitMat(deck) {
 	shuffleDeck(deck);
 	putDeckInInitMat();
 	makeLastCardDraggable(deck);
+	makeZonesDraggable();
+	//makeLastCardDraggable(initDeck);
 } // cargarTapeteInicial
 
 function putDeckInInitMat() {
@@ -171,6 +172,9 @@ function putDeckInInitMat() {
 		stepCount++;
 	});
 }
+// on drag start, on drag , on dragend
+
+
 
 function createCard(number, suit) {
 	card = document.createElement("img");
@@ -226,14 +230,78 @@ function makeLastCardDraggable(deck) {
 	let lastCard = deck[deck.length - 1];
 	lastCard.classList.add("draggable");
 	lastCard.setAttribute("draggable", true);
+	lastCard.addEventListener('dragstart', (ev) => {
+		// 'ev' es el objeto de evento que me preguntaste antes
+		ev.dataTransfer.setData("text/plain/numero", ev.target.dataset["number"]);
+		ev.dataTransfer.setData("text/plain/palo", ev.target.dataset["suit"]);
+	});
+	lastCard.addEventListener('drag', (ev) => {
+		ev.target.style.cursor = "move";
+		console.log("dragging");
+		
+	});
 }
 function makeZonesDraggable() {
 	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
 	dropZones.forEach(zone => {
-		zone.addEventListener("dragover", (e) => {
-			e.preventDefault();
-		});
-	});
+	// Evento cuando la carta entra en la zona
+    zone.addEventListener("dragenter", (e) => {
+    	e.preventDefault(); 
+    	zone.classList.add("drag-over"); 
+    });
+
+    // Evento cuando la carta está sobre la zona 
+    zone.addEventListener("dragover", (e) => {
+    	e.preventDefault(); 
+    });
+
+    // Evento cuando se suelta la carta
+    zone.addEventListener("drop", (e) => {
+    	e.preventDefault();  
+    	zone.classList.remove("drag-over"); 
+      	drop(e);  
+    });
+
+    // Evento cuando la carta sale de la zona
+    zone.addEventListener("dragleave", (e) => {
+      zone.classList.remove("drag-over"); 
+    });
+  });
 }
+
+function drop(ev) {
+	ev.preventDefault();	
+	let numero = ev.dataTransfer.getData("text/plain/numero");
+ 	let palo = ev.dataTransfer.getData("text/plain/palo");
+
+  	const elementoArrastrado = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
+	elementoArrastrado.classList.add("card-moved");
+	ev.target.appendChild(elementoArrastrado);
+	console.log(`Carta ${numero} de ${palo} colocada en zona destino.`);
+
+	// Aumentar un movimiento despues de soltar la carta
+	incMoveCounter();
+
+
+
+ /*  const idElemento = ev.dataTransfer.getData("text/plain");
+        const elementoArrastrado = document.getElementById(idElemento);
+        
+        // Lo movemos al nuevo contenedor
+        ev.target.appendChild(elementoArrastrado); */
+
+  // Ejemplo de condición para verificar si la carta puede ser colocada
+  /* if (canPlaceCard(numero, palo)) {
+    // Coloca la carta y actualiza los contadores
+	makeLastCardDraggable(initDeck);  // Si la carta proviene del tapete inicial
+    makeLastCardDraggable(leftoverDeck);  // Si la carta proviene del tapete sobrante
+  } */
+}
+// Función para finalizar el juego
+function endGame() {
+	// Detener el temporizador
+	if (timer) clearInterval(timer);
+	alert("¡Felicidades! Has completado el juego en " + timerCount.innerHTML + " con " + moveCount.innerHTML + " movimientos.");
+} // finalizarJuego
 
 startGame();
