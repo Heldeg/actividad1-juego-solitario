@@ -320,7 +320,8 @@ function drop(ev) {
 
 	updateArrayDecks(matId, targetId);
 	updateCounterChangedDecks(matId, targetId);
-	checkVicotory();
+	checkGameStatus();
+
 }
 
 function isMoveAllowed(suit, targetId) {
@@ -364,7 +365,7 @@ function removeSecondLastCardDragg(deck) {
 	}
 }
 
-function makeNoDaggable (card) {
+function makeNoDaggable(card) {
 	card.classList.remove("draggable");
 	card.setAttribute("draggable", false);
 }
@@ -376,10 +377,29 @@ function centerCard(card) {
 	card.style.transform = "translate(-50%, -50%)";
 }
 
-function checkVicotory() {
-	if (initDeck.length == 0 && leftoverDeck.length == 0) {
-		endGame();
+function checkGameStatus() {
+	if (initDeck.length == 0) {
+		if (leftoverDeck.length > 0) {
+			reTakeCards();
+		} else {
+			endGame();
+		}
 	}
+}
+
+function reTakeCards() {
+	let numCards = leftoverDeck.length;
+	removeSecondLastCardDragg(leftoverDeck);
+	for (let i = 0; i < numCards; i++) {
+		let card = leftoverDeck.pop();
+		card.style.transform = "";
+		initDeck.push(card)
+	}
+	shuffleDeck(initDeck);
+	putDeckInInitMat();
+	makeLastCardDraggable(initDeck);
+	updateCounter(leftoverCount, leftoverDeck);
+	updateCounter(initCount, initDeck);
 }
 
 // Función para finalizar el juego
