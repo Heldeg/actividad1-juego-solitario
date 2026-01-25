@@ -165,8 +165,8 @@ function setupInitMat(deck) {
 function putDeckInInitMat() {
 	let stepCount = 0
 	initDeck.forEach(element => {
-		element.style.top = `${stepCount * step}px`;
-		element.style.left = `${stepCount * step}px`;
+		element.style.top = `${5+stepCount * step}px`;
+		element.style.left = `${5+stepCount * step}px`;
 		initMat.appendChild(element);
 		stepCount++;
 	});
