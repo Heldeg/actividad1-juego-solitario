@@ -309,17 +309,18 @@ function drop(ev) {
 			return;
 		}
 	}
+	// Aumentar un movimiento despues de soltar la carta
+	incMoveCounter();
 	const card = document.querySelector(`[data-number='${number}'][data-suit='${suit}']`);
 	centerCard(card);
 	ev.currentTarget.appendChild(card);
 
 	console.log(`Carta ${number} de ${suit} colocada en zona destino. Origen: ${matId}`);
 
-	// Aumentar un movimiento despues de soltar la carta
-	incMoveCounter();
+
 	updateArrayDecks(dictDecks[matId], dictDecks[targetId]);
 	updateCounterChangedDecks(matId, targetId);
-
+	checkVicotory();
 }
 
 function isMoveAllowed(suit,targetId) {
@@ -362,6 +363,12 @@ function centerCard(card) {
 	card.style.top = "50%";
 	card.style.left = "50%";
 	card.style.transform = "translate(-50%, -50%)";
+}
+
+function checkVicotory() {
+	if (initDeck.length == 0 && leftoverDeck.length == 0){
+		endGame();
+	}
 }
 
 // Función para finalizar el juego
