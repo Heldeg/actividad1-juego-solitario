@@ -166,8 +166,8 @@ function setupInitMat(deck) {
 function putDeckInInitMat() {
 	let stepCount = 0
 	initDeck.forEach(element => {
-		element.style.top = `${stepCount * step}px`;
-		element.style.left = `${stepCount * step}px`;
+		element.style.top = `${5+stepCount * step}px`;
+		element.style.left = `${5+stepCount * step}px`;
 		initMat.appendChild(element);
 		stepCount++;
 	});
@@ -274,9 +274,11 @@ function drop(ev) {
 	let numero = ev.dataTransfer.getData("text/plain/numero");
  	let palo = ev.dataTransfer.getData("text/plain/palo");
 
-  	const elementoArrastrado = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
-	elementoArrastrado.classList.add("card-moved");
-	ev.target.appendChild(elementoArrastrado);
+  	const draggedElement = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
+	draggedElement.style.top = "50%";
+	draggedElement.style.left = "50%";
+	draggedElement.style.transform = "translate(-50%, -50%)";
+	ev.target.appendChild(draggedElement);
 	console.log(`Carta ${numero} de ${palo} colocada en zona destino.`);
 
 	// Aumentar un movimiento despues de soltar la carta
