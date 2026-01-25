@@ -44,6 +44,25 @@ let timerCount = document.getElementById("timer_counter"); // span cuenta tiempo
 let seconds = 0;    // cuenta de segundos
 let timer = null; // manejador del temporizador
 
+
+const dictDecks = {
+	"initial": initDeck,
+	"leftover": leftoverDeck,
+	"receptor1": receptorDeck1,
+	"receptor2": receptorDeck2,
+	"receptor3": receptorDeck3,
+	"receptor4": receptorDeck4
+}
+
+const dictCounter = {
+	"initial": initCount,
+	"leftover": leftoverCount,
+	"receptor1": receptorCount1,
+	"receptor2": receptorCount2,
+	"receptor3": receptorCount3,
+	"receptor4": receptorCount4
+}
+
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
 
@@ -231,8 +250,9 @@ function makeLastCardDraggable(deck) {
 	lastCard.setAttribute("draggable", true);
 	lastCard.addEventListener('dragstart', (ev) => {
 		// 'ev' es el objeto de evento que me preguntaste antes
-		ev.dataTransfer.setData("text/plain/numero", ev.target.dataset["number"]);
-		ev.dataTransfer.setData("text/plain/palo", ev.target.dataset["suit"]);
+		ev.dataTransfer.setData("text/plain/number", ev.target.dataset["number"]);
+		ev.dataTransfer.setData("text/plain/suit", ev.target.dataset["suit"]);
+		ev.dataTransfer.setData("text/plain/matId", ev.target.parentElement.id);
 	});
 	lastCard.addEventListener('drag', (ev) => {
 		ev.target.style.cursor = "move";
@@ -270,18 +290,28 @@ function makeZonesDraggable() {
 
 function drop(ev) {
 	ev.preventDefault();
-	let numero = ev.dataTransfer.getData("text/plain/numero");
-	let palo = ev.dataTransfer.getData("text/plain/palo");
+	let number = ev.dataTransfer.getData("text/plain/number");
+	let suit = ev.dataTransfer.getData("text/plain/suit");
+	let matId = ev.dataTransfer.getData("text/plain/matId");
 
-	const draggedElement = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
-	centerCard(draggedElement);
-	ev.target.appendChild(draggedElement);
-	console.log(`Carta ${numero} de ${palo} colocada en zona destino.`);
+	const targetId = ev.target.id;
+
+	const card = document.querySelector(`[data-number='${number}'][data-suit='${suit}']`);
+	centerCard(card);
+	ev.target.appendChild(card);
+
+	console.log(`Carta ${number} de ${suit} colocada en zona destino. Origen: ${matId}`);
 
 	// Aumentar un movimiento despues de soltar la carta
 	incMoveCounter();
+	updateArrayDecks(dictDecks[matId], dictDecks[targetId]);
+	updateCounterChangedDecks(matId, targetId);
 
-
+	/*
+	1. Actualizar arreglos
+	2. Cambio etiquetas draggable
+	3. Actualizar contadores
+	*/
 
 	/*  const idElemento = ev.dataTransfer.getData("text/plain");
 		   const elementoArrastrado = document.getElementById(idElemento);
@@ -296,6 +326,27 @@ function drop(ev) {
 	  makeLastCardDraggable(leftoverDeck);  // Si la carta proviene del tapete sobrante
 	} */
 }
+
+function updateArrayDecks(originDeck, targetDeck) {
+	const card = originDeck.pop();
+	targetDeck.push(card);
+	makeLastCardDraggable(originDeck);
+	removeSecondLastCardDragg(targetDeck);
+}
+
+function updateCounterChangedDecks(originDeckId, targetDeckId) {
+	updateCounter(dictCounter[originDeckId], dictDecks[originDeckId]);
+	updateCounter(dictCounter[targetDeckId], dictDecks[targetDeckId]);
+}
+
+function removeSecondLastCardDragg(deck) {
+	if (deck.length > 1) {
+		let lastCard = deck[deck.length - 2];
+		lastCard.classList.remove("draggable");
+		lastCard.setAttribute("draggable", false);
+	}
+}
+
 
 function centerCard(card) {
 	card.style.top = "50%";
