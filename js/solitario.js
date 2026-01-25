@@ -77,6 +77,7 @@ function startGame() {
 	// Arrancar el conteo de tiempo
 	/*** !!!!!!!!!!!!!!!!!!! CODIGO !!!!!!!!!!!!!!!!!!!! **/
 	setTimer();
+	makeZonesDraggable();
 
 } // comenzarJuego
 
@@ -159,15 +160,13 @@ function setupInitMat(deck) {
 	shuffleDeck(deck);
 	putDeckInInitMat();
 	makeLastCardDraggable(deck);
-	makeZonesDraggable();
-	//makeLastCardDraggable(initDeck);
 } // cargarTapeteInicial
 
 function putDeckInInitMat() {
 	let stepCount = 0
 	initDeck.forEach(element => {
-		element.style.top = `${5+stepCount * step}px`;
-		element.style.left = `${5+stepCount * step}px`;
+		element.style.top = `${5 + stepCount * step}px`;
+		element.style.left = `${5 + stepCount * step}px`;
 		initMat.appendChild(element);
 		stepCount++;
 	});
@@ -238,46 +237,44 @@ function makeLastCardDraggable(deck) {
 	lastCard.addEventListener('drag', (ev) => {
 		ev.target.style.cursor = "move";
 		console.log("dragging");
-		
+
 	});
 }
 function makeZonesDraggable() {
 	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
 	dropZones.forEach(zone => {
-	// Evento cuando la carta entra en la zona
-    zone.addEventListener("dragenter", (e) => {
-    	e.preventDefault(); 
-    	zone.classList.add("drag-over"); 
-    });
+		// Evento cuando la carta entra en la zona
+		zone.addEventListener("dragenter", (e) => {
+			e.preventDefault();
+			zone.classList.add("drag-over");
+		});
 
-    // Evento cuando la carta está sobre la zona 
-    zone.addEventListener("dragover", (e) => {
-    	e.preventDefault(); 
-    });
+		// Evento cuando la carta está sobre la zona 
+		zone.addEventListener("dragover", (e) => {
+			e.preventDefault();
+		});
 
-    // Evento cuando se suelta la carta
-    zone.addEventListener("drop", (e) => {
-    	e.preventDefault();  
-    	zone.classList.remove("drag-over"); 
-      	drop(e);  
-    });
+		// Evento cuando se suelta la carta
+		zone.addEventListener("drop", (e) => {
+			e.preventDefault();
+			zone.classList.remove("drag-over");
+			drop(e);
+		});
 
-    // Evento cuando la carta sale de la zona
-    zone.addEventListener("dragleave", (e) => {
-      zone.classList.remove("drag-over"); 
-    });
-  });
+		// Evento cuando la carta sale de la zona
+		zone.addEventListener("dragleave", (e) => {
+			zone.classList.remove("drag-over");
+		});
+	});
 }
 
 function drop(ev) {
-	ev.preventDefault();	
+	ev.preventDefault();
 	let numero = ev.dataTransfer.getData("text/plain/numero");
- 	let palo = ev.dataTransfer.getData("text/plain/palo");
+	let palo = ev.dataTransfer.getData("text/plain/palo");
 
-  	const draggedElement = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
-	draggedElement.style.top = "50%";
-	draggedElement.style.left = "50%";
-	draggedElement.style.transform = "translate(-50%, -50%)";
+	const draggedElement = document.querySelector(`[data-number='${numero}'][data-suit='${palo}']`);
+	centerCard(draggedElement);
 	ev.target.appendChild(draggedElement);
 	console.log(`Carta ${numero} de ${palo} colocada en zona destino.`);
 
@@ -286,19 +283,26 @@ function drop(ev) {
 
 
 
- /*  const idElemento = ev.dataTransfer.getData("text/plain");
-        const elementoArrastrado = document.getElementById(idElemento);
-        
-        // Lo movemos al nuevo contenedor
-        ev.target.appendChild(elementoArrastrado); */
+	/*  const idElemento = ev.dataTransfer.getData("text/plain");
+		   const elementoArrastrado = document.getElementById(idElemento);
+		   
+		   // Lo movemos al nuevo contenedor
+		   ev.target.appendChild(elementoArrastrado); */
 
-  // Ejemplo de condición para verificar si la carta puede ser colocada
-  /* if (canPlaceCard(numero, palo)) {
-    // Coloca la carta y actualiza los contadores
-	makeLastCardDraggable(initDeck);  // Si la carta proviene del tapete inicial
-    makeLastCardDraggable(leftoverDeck);  // Si la carta proviene del tapete sobrante
-  } */
+	// Ejemplo de condición para verificar si la carta puede ser colocada
+	/* if (canPlaceCard(numero, palo)) {
+	  // Coloca la carta y actualiza los contadores
+	  makeLastCardDraggable(initDeck);  // Si la carta proviene del tapete inicial
+	  makeLastCardDraggable(leftoverDeck);  // Si la carta proviene del tapete sobrante
+	} */
 }
+
+function centerCard(card) {
+	card.style.top = "50%";
+	card.style.left = "50%";
+	card.style.transform = "translate(-50%, -50%)";
+}
+
 // Función para finalizar el juego
 function endGame() {
 	// Detener el temporizador
