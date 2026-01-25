@@ -304,6 +304,12 @@ function drop(ev) {
 	if (targetId != "leftover") {
 		if (!isMoveAllowed(number, suit, targetId)) {
 			//TODO: Agregar estilo marco rojo
+			//TODO: Agregar estilo marco rojo
+			const currentMat = ev.currentTarget;
+			currentMat.classList.add("error-border");
+			setTimeout(() => {
+				currentMat.classList.remove("error-border");
+			}, 500);
 			return;
 		}
 	}

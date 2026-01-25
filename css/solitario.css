@@ -144,11 +144,6 @@ div.mat#leftover.drag-over {
 	transition: all 0.4s ease;
 }
 
-.invalid-move {
-	animation: invalidMoveAnimation 0.5s !important;
-	color: red !important;
-}
-
 .modal-overlay {
 	position: fixed;
 	top: 0;
@@ -197,4 +192,32 @@ div.mat#leftover.drag-over {
 
 .modal-close-btn:hover {
 	background-color: #c4400e;
+}
+
+/* Animación de vibración para indicar error */
+@keyframes shake {
+
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+
+	20%,
+	60% {
+		transform: translateX(-5px);
+	}
+
+	40%,
+	80% {
+		transform: translateX(5px);
+	}
+}
+
+div.mat.error-border {
+	border-color: #ff3333 !important;
+	box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+	/* Resplandor rojo */
+	animation: shake 0.4s ease-in-out;
+	transition: none !important;
+	/* Para que el rojo aparezca de golpe y no suavemente */
 }
