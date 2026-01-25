@@ -3,6 +3,13 @@
 const imgPath = '../imagenes/baraja'
 // Array de palos
 let suits = ["viu", "cua", "hex", "cir"];
+let colorDict = {
+	// false -> black true -> red
+	"viu": true,
+	"cua": true,
+	"hex": false,
+	"cir": false
+}
 // Array de número de cartas
 //let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
@@ -294,9 +301,14 @@ function drop(ev) {
 	let number = ev.dataTransfer.getData("text/plain/number");
 	let suit = ev.dataTransfer.getData("text/plain/suit");
 	let matId = ev.dataTransfer.getData("text/plain/matId");
-
 	const targetId = ev.currentTarget.id;
 
+	if (targetId != "leftover") {
+		if(!isMoveAllowed(suit, targetId)) {
+			//TODO: Agregar estilo marco rojo
+			return;
+		}
+	}
 	const card = document.querySelector(`[data-number='${number}'][data-suit='${suit}']`);
 	centerCard(card);
 	ev.currentTarget.appendChild(card);
@@ -308,18 +320,21 @@ function drop(ev) {
 	updateArrayDecks(dictDecks[matId], dictDecks[targetId]);
 	updateCounterChangedDecks(matId, targetId);
 
-	/*  const idElemento = ev.dataTransfer.getData("text/plain");
-		   const elementoArrastrado = document.getElementById(idElemento);
-		   
-		   // Lo movemos al nuevo contenedor
-		   ev.target.appendChild(elementoArrastrado); */
+}
 
-	// Ejemplo de condición para verificar si la carta puede ser colocada
-	/* if (canPlaceCard(numero, palo)) {
-	  // Coloca la carta y actualiza los contadores
-	  makeLastCardDraggable(initDeck);  // Si la carta proviene del tapete inicial
-	  makeLastCardDraggable(leftoverDeck);  // Si la carta proviene del tapete sobrante
-	} */
+function isMoveAllowed(suit,targetId) {
+	let dickArray = dictDecks[targetId];
+	let lastCardTarget = dickArray[dickArray.length - 1];
+	if(!lastCardTarget){
+		return true;
+	}
+	let cardTargetSuit = lastCardTarget.dataset["suit"];
+
+	return !biconditional(colorDict[suit], colorDict[cardTargetSuit]);
+}
+
+function biconditional(p1, p2) {
+	return (p1 && p2) || (!p1 && !p2);
 }
 
 function updateArrayDecks(originDeck, targetDeck) {
