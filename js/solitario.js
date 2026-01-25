@@ -3,12 +3,19 @@
 const imgPath = '../imagenes/baraja'
 // Array de palos
 let suits = ["viu", "cua", "hex", "cir"];
+let colorDict = {
+	// false -> black true -> red
+	"viu": true,
+	"cua": true,
+	"hex": false,
+	"cir": false
+}
 // Array de número de cartas
-//let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
 
 //TODO: allow the user to decide the range in the UI
-let numberRange = [9, 10, 11, 12];
+//let numberRange = [9, 10, 11, 12];
 
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
@@ -43,6 +50,25 @@ let moveCount = document.getElementById("movement_counter");
 let timerCount = document.getElementById("timer_counter"); // span cuenta tiempo
 let seconds = 0;    // cuenta de segundos
 let timer = null; // manejador del temporizador
+
+
+const dictDecks = {
+	"initial": initDeck,
+	"leftover": leftoverDeck,
+	"receptor1": receptorDeck1,
+	"receptor2": receptorDeck2,
+	"receptor3": receptorDeck3,
+	"receptor4": receptorDeck4
+}
+
+const dictCounter = {
+	"initial": initCount,
+	"leftover": leftoverCount,
+	"receptor1": receptorCount1,
+	"receptor2": receptorCount2,
+	"receptor3": receptorCount3,
+	"receptor4": receptorCount4
+}
 
 /***** FIN DECLARACIÓN DE VARIABLES GLOBALES *****/
 
@@ -165,12 +191,15 @@ function setupInitMat(deck) {
 function putDeckInInitMat() {
 	let stepCount = 0
 	initDeck.forEach(element => {
-		element.style.top = `${5+stepCount * step}px`;
-		element.style.left = `${5+stepCount * step}px`;
+		element.style.top = `${5 + stepCount * step}px`;
+		element.style.left = `${5 + stepCount * step}px`;
 		initMat.appendChild(element);
 		stepCount++;
 	});
 }
+// on drag start, on drag , on dragend
+
+
 
 function createCard(number, suit) {
 	card = document.createElement("img");
@@ -223,17 +252,202 @@ function setCounter(counter, value) {
 } // setCounter
 
 function makeLastCardDraggable(deck) {
+	if (deck.length == 0) return;
 	let lastCard = deck[deck.length - 1];
 	lastCard.classList.add("draggable");
 	lastCard.setAttribute("draggable", true);
+	lastCard.addEventListener('dragstart', (ev) => {
+		// 'ev' es el objeto de evento que me preguntaste antes
+		ev.dataTransfer.setData("text/plain/number", ev.target.dataset["number"]);
+		ev.dataTransfer.setData("text/plain/suit", ev.target.dataset["suit"]);
+		ev.dataTransfer.setData("text/plain/matId", ev.target.parentElement.id);
+	});
+	lastCard.addEventListener('drag', (ev) => {
+		console.log("dragging");
+	});
 }
 function makeZonesDraggable() {
 	let dropZones = [receptorMat1, receptorMat2, receptorMat3, receptorMat4, leftoverCardMat];
 	dropZones.forEach(zone => {
+		// Evento cuando la carta entra en la zona
+		zone.addEventListener("dragenter", (e) => {
+			e.preventDefault();
+			zone.classList.add("drag-over");
+		});
+
+		// Evento cuando la carta está sobre la zona 
 		zone.addEventListener("dragover", (e) => {
 			e.preventDefault();
 		});
+
+		// Evento cuando se suelta la carta
+		zone.addEventListener("drop", (e) => {
+			e.preventDefault();
+			zone.classList.remove("drag-over");
+			drop(e);
+		});
+
+		// Evento cuando la carta sale de la zona
+		zone.addEventListener("dragleave", (e) => {
+			zone.classList.remove("drag-over");
+		});
 	});
+}
+
+function drop(ev) {
+	ev.preventDefault();
+	let number = ev.dataTransfer.getData("text/plain/number");
+	let suit = ev.dataTransfer.getData("text/plain/suit");
+	let matId = ev.dataTransfer.getData("text/plain/matId");
+	const targetId = ev.currentTarget.id;
+
+	if (targetId != "leftover") {
+		if (!isMoveAllowed(number, suit, targetId)) {
+			//TODO: Agregar estilo marco rojo
+			//TODO: Agregar estilo marco rojo
+			const currentMat = ev.currentTarget;
+			currentMat.classList.add("error-border");
+			setTimeout(() => {
+				currentMat.classList.remove("error-border");
+			}, 500);
+			return;
+		}
+	}
+	// Aumentar un movimiento despues de soltar la carta
+	incMoveCounter();
+	const card = document.querySelector(`[data-number='${number}'][data-suit='${suit}']`);
+	centerCard(card);
+	ev.currentTarget.appendChild(card);
+
+	console.log(`Carta ${number} de ${suit} colocada en zona destino. Origen: ${matId}`);
+
+
+	updateArrayDecks(matId, targetId);
+	updateCounterChangedDecks(matId, targetId);
+	checkGameStatus();
+
+}
+
+function isMoveAllowed(cardNumber, suit, targetId,) {
+	let dickArray = dictDecks[targetId];
+	let lastCardTarget = dickArray[dickArray.length - 1];
+
+
+	if (!lastCardTarget) {
+		if (parseInt(cardNumber) === 12) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	let cardTargetSuit = lastCardTarget.dataset["suit"];
+	let cardTargetNumber = lastCardTarget.dataset["number"];
+
+	return !biconditionalSameColor(colorDict[suit], colorDict[cardTargetSuit]) && isNextNumb(cardTargetNumber, cardNumber);
+}
+
+function biconditionalSameColor(p1, p2) {
+	return (p1 && p2) || (!p1 && !p2);
+}
+
+function isNextNumb(cardTargetNumber, cardNumber) {
+	return parseInt(cardTargetNumber) === parseInt(cardNumber) + 1;
+}
+
+function updateArrayDecks(originDeckId, targetDeckId) {
+	let originDeck = dictDecks[originDeckId];
+	let targetDeck = dictDecks[targetDeckId];
+	const card = originDeck.pop();
+	targetDeck.push(card);
+	makeLastCardDraggable(originDeck);
+	if (targetDeckId == "leftover") {
+		removeSecondLastCardDragg(targetDeck);
+	} else {
+		makeNoDaggable(card);
+	}
+
+}
+
+function updateCounterChangedDecks(originDeckId, targetDeckId) {
+	updateCounter(dictCounter[originDeckId], dictDecks[originDeckId]);
+	updateCounter(dictCounter[targetDeckId], dictDecks[targetDeckId]);
+}
+
+function removeSecondLastCardDragg(deck) {
+	if (deck.length > 1) {
+		let lastCard = deck[deck.length - 2];
+		makeNoDaggable(lastCard);
+	}
+}
+
+function makeNoDaggable(card) {
+	card.classList.remove("draggable");
+	card.setAttribute("draggable", false);
+}
+
+
+function centerCard(card) {
+	card.style.top = "50%";
+	card.style.left = "50%";
+	card.style.transform = "translate(-50%, -50%)";
+}
+
+function checkGameStatus() {
+	if (initDeck.length == 0) {
+		if (leftoverDeck.length > 0) {
+			reTakeCards();
+		} else {
+			endGame();
+		}
+	}
+}
+
+function reTakeCards() {
+	let numCards = leftoverDeck.length;
+	removeSecondLastCardDragg(leftoverDeck);
+	for (let i = 0; i < numCards; i++) {
+		let card = leftoverDeck.pop();
+		card.style.transform = "";
+		initDeck.push(card)
+	}
+	shuffleDeck(initDeck);
+	putDeckInInitMat();
+	makeLastCardDraggable(initDeck);
+	updateCounter(leftoverCount, leftoverDeck);
+	updateCounter(initCount, initDeck);
+}
+
+// Función para finalizar el juego
+function endGame() {
+	// Detener el temporizador
+	if (timer) clearInterval(timer);
+	showFinishModal();
+} // finalizarJuego
+
+function showFinishModal() {
+	// Crear el contenedor de fondo (overlay)
+	const overlay = document.createElement('div');
+	overlay.className = 'modal-overlay';
+
+	// Crear el contenido del modal
+	const modal = document.createElement('div');
+	modal.className = 'modal-content';
+
+	modal.innerHTML = `
+        <h2>¡Felicidades!</h2>
+        <p>Has completado el juego.</p>
+        <p>Tiempo: <strong>${timerCount.innerHTML}</strong></p>
+        <p>Movimientos: <strong>${moveCount.innerHTML}</strong></p>
+        <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
+    `;
+
+	// Añadir el modal al overlay y el overlay al body
+	overlay.appendChild(modal);
+	document.body.appendChild(overlay);
+}
+
+function resetGame() {
+	location.reload();
 }
 
 startGame();
