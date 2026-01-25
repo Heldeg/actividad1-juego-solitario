@@ -11,11 +11,11 @@ let colorDict = {
 	"cir": false
 }
 // Array de número de cartas
-//let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+let numberRange = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 // En las pruebas iniciales solo se trabajará con cuatro cartas por palo:
 
 //TODO: allow the user to decide the range in the UI
-let numberRange = [9, 10, 11, 12];
+//let numberRange = [9, 10, 11, 12];
 
 
 // paso (top y left) en pixeles de una carta a la siguiente en un mazo
