@@ -263,9 +263,7 @@ function makeLastCardDraggable(deck) {
 		ev.dataTransfer.setData("text/plain/matId", ev.target.parentElement.id);
 	});
 	lastCard.addEventListener('drag', (ev) => {
-		ev.target.style.cursor = "move";
 		console.log("dragging");
-
 	});
 }
 function makeZonesDraggable() {
@@ -417,8 +415,30 @@ function reTakeCards() {
 function endGame() {
 	// Detener el temporizador
 	if (timer) clearInterval(timer);
-	alert("¡Felicidades! Has completado el juego en " + timerCount.innerHTML + " con " + moveCount.innerHTML + " movimientos.");
+	showFinishModal();
 } // finalizarJuego
+
+function showFinishModal() {
+	// Crear el contenedor de fondo (overlay)
+	const overlay = document.createElement('div');
+	overlay.className = 'modal-overlay';
+
+	// Crear el contenido del modal
+	const modal = document.createElement('div');
+	modal.className = 'modal-content';
+
+	modal.innerHTML = `
+        <h2>¡Felicidades!</h2>
+        <p>Has completado el juego.</p>
+        <p>Tiempo: <strong>${timerCount.innerHTML}</strong></p>
+        <p>Movimientos: <strong>${moveCount.innerHTML}</strong></p>
+        <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove()">Cerrar</button>
+    `;
+
+	// Añadir el modal al overlay y el overlay al body
+	overlay.appendChild(modal);
+	document.body.appendChild(overlay);
+}
 
 function resetGame() {
 	location.reload();
