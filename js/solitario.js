@@ -245,6 +245,7 @@ function setCounter(counter, value) {
 } // setCounter
 
 function makeLastCardDraggable(deck) {
+	if (deck.length == 0) return;
 	let lastCard = deck[deck.length - 1];
 	lastCard.classList.add("draggable");
 	lastCard.setAttribute("draggable", true);
@@ -306,12 +307,6 @@ function drop(ev) {
 	incMoveCounter();
 	updateArrayDecks(dictDecks[matId], dictDecks[targetId]);
 	updateCounterChangedDecks(matId, targetId);
-
-	/*
-	1. Actualizar arreglos
-	2. Cambio etiquetas draggable
-	3. Actualizar contadores
-	*/
 
 	/*  const idElemento = ev.dataTransfer.getData("text/plain");
 		   const elementoArrastrado = document.getElementById(idElemento);
