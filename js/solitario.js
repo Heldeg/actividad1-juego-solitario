@@ -304,7 +304,7 @@ function drop(ev) {
 	const targetId = ev.currentTarget.id;
 
 	if (targetId != "leftover") {
-		if (!isMoveAllowed(suit, targetId)) {
+		if (!isMoveAllowed(number, suit, targetId)) {
 			//TODO: Agregar estilo marco rojo
 			return;
 		}
@@ -324,19 +324,28 @@ function drop(ev) {
 
 }
 
-function isMoveAllowed(suit, targetId) {
+function isMoveAllowed(cardNumber, suit, targetId,) {
 	let dickArray = dictDecks[targetId];
 	let lastCardTarget = dickArray[dickArray.length - 1];
+
+
 	if (!lastCardTarget) {
-		return true;
+		if (parseInt(cardNumber) === 12) {
+			return true;
+		}
 	}
 	let cardTargetSuit = lastCardTarget.dataset["suit"];
+	let cardTargetNumber = lastCardTarget.dataset["number"];
 
-	return !biconditional(colorDict[suit], colorDict[cardTargetSuit]);
+	return !biconditionalSameColor(colorDict[suit], colorDict[cardTargetSuit]) && isNextNumb(cardTargetNumber, cardNumber);
 }
 
-function biconditional(p1, p2) {
+function biconditionalSameColor(p1, p2) {
 	return (p1 && p2) || (!p1 && !p2);
+}
+
+function isNextNumb(cardTargetNumber, cardNumber) {
+	return parseInt(cardTargetNumber) === parseInt(cardNumber) + 1;
 }
 
 function updateArrayDecks(originDeckId, targetDeckId) {
